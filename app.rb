@@ -27,6 +27,8 @@ helpers do
     if time.to_s.length == 1
       return "0#{time}"
     end
+
+    time
   end
 
   def current_period
