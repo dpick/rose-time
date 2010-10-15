@@ -28,9 +28,14 @@ helpers do
     tz.utc_to_local(Time.now.utc)
   end
 
+  def to_local(time)
+    tz = TZInfo::Timezone.get('America/Indiana/Indianapolis')
+    tz.utc_to_local(time)
+  end
+
   def current_period
     $schedule.each do |period|
-      if get_time(period) <=> current_time
+      if to_local(get_time(period)) <=> current_time
         current = period
       end
     end
@@ -45,7 +50,7 @@ end
 
 #puts "The next period is #{current_period[0]}"
 get '/' do
-  difference = current_period[1] - current_time
+  difference = to_local(current_period[1]) - current_time
   seconds = difference % 60
   difference = (difference - seconds) / 60
   minutes = difference % 60
