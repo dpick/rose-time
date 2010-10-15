@@ -26,6 +26,7 @@ helpers do
   def current_period
     tz = TZInfo::Timezone.get('America/Indiana/Indianapolis')
     now = tz.utc_to_local(Time.now.utc).strftime("%I:%M %p")
+    puts now
 
     $schedule.each do |period|
       if get_time(period) <=> now
