@@ -5,16 +5,16 @@ require 'tzinfo'
 
 #used array instead of hash because I need them in order
 $schedule = [
-  ['1st',  Time.parse("8:00 am")], 
-  ['2nd',  Time.parse("8:55 am")],
-  ['3rd',  Time.parse("9:50 am")],
-  ['4th',  Time.parse("10:45 am")],
-  ['5th',  Time.parse("11:45 am")],
-  ['6th',  Time.parse("12:35 pm")],
-  ['7th',  Time.parse("1:30 pm")],
-  ['8th',  Time.parse("2:25 pm")],
-  ['9th',  Time.parse("3:20 pm")],
-  ['10th', Time.parse("4:15 pm")]
+  ['1st',  Time.parse("8:00 am").utc], 
+  ['2nd',  Time.parse("8:55 am").utc],
+  ['3rd',  Time.parse("9:50 am").utc],
+  ['4th',  Time.parse("10:45 am").utc],
+  ['5th',  Time.parse("11:45 am").utc],
+  ['6th',  Time.parse("12:35 pm").utc],
+  ['7th',  Time.parse("1:30 pm").utc],
+  ['8th',  Time.parse("2:25 pm").utc],
+  ['9th',  Time.parse("3:20 pm").utc],
+  ['10th', Time.parse("4:15 pm").utc]
 ]
 
 
@@ -23,13 +23,14 @@ helpers do
     return period[1]
   end
 
-  def current_period
+  def current_time
     tz = TZInfo::Timezone.get('America/Indiana/Indianapolis')
-    now = tz.utc_to_local(Time.now.utc).strftime("%I:%M %p")
-    puts now
+    tz.utc_to_local(Time.now.utc)
+  end
 
+  def current_period
     $schedule.each do |period|
-      if get_time(period) <=> now
+      if get_time(period) <=> current_time
         current = period
       end
     end
@@ -44,7 +45,7 @@ end
 
 #puts "The next period is #{current_period[0]}"
 get '/' do
-  difference = current_period[1] - Time.now
+  difference = current_period[1] - current_time
   seconds = difference % 60
   difference = (difference - seconds) / 60
   minutes = difference % 60
