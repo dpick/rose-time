@@ -24,28 +24,26 @@ helpers do
   end
 
   def current_period
-    $schedule.each do |period|
-      if get_time(period) <=> Time.now
-        current = period
-      end
-    end
+    current = $schedule[0]
 
-    if defined? current
-      return current
-    else
-      return $schedule[0]
+    $schedule.each do |period|
+      if get_time(period) > Time.now
+        return period
+      end
     end
   end
 end
 
 get '/' do
-  difference = current_period[1] - Time.now
+  current = current_period
+  current = $schedule[0] if current[0] == '10th'
+
+  difference = current[1] - Time.now
   seconds = difference % 60
   difference = (difference - seconds) / 60
   minutes = difference % 60
   difference = (difference - minutes) / 60
   hours = difference % 24
 
-  timeUntil = Time.parse("#{hours.to_i}:#{minutes.to_i}")
-  "#{timeUntil.strftime("%I:%M")} until #{current_period[0]} hour"
+  "#{hours.to_i}:#{minutes.to_i} until #{current[0]} hour"
 end
