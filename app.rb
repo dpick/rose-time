@@ -24,8 +24,7 @@ helpers do
   end
 
   def current_time
-    tz = TZInfo::Timezone.get('America/Indiana/Indianapolis')
-    tz.utc_to_local(Time.now.utc)
+    to_local(Time.now.utc)
   end
 
   def to_local(time)
@@ -49,7 +48,7 @@ helpers do
 end
 
 get '/' do
-  puts "The next period is #{to_local(current_period[1])}"
+  puts "The next period is #{to_local(current_period[1])} - #{current_period[1]}"
   difference = to_local(current_period[1]) - current_time
   seconds = difference % 60
   difference = (difference - seconds) / 60
