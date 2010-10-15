@@ -46,5 +46,6 @@ get '/' do
   difference = (difference - minutes) / 60
   hours = difference % 24
 
-  "#{hours.to_i}:#{minutes.to_i} until #{current_period[0]} hour"
+  timeUntil = Time.parse("#{hours.to_i}:#{minutes.to_i}")
+  "#{timeUntil.strftime("%I:%M")} until #{current_period[0]} hour"
 end
