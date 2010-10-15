@@ -22,6 +22,12 @@ helpers do
   def get_time(period)
     return period[1]
   end
+  
+  def pad(time)
+    if time.to_s.length == 1
+      return "0#{time}"
+    end
+  end
 
   def current_period
     current = $schedule[0]
@@ -45,5 +51,5 @@ get '/' do
   difference = (difference - minutes) / 60
   hours = difference % 24
 
-  "#{hours.to_i}:#{minutes.to_i} until #{current[0]} hour"
+  "#{hours.to_i}:#{pad(minutes.to_i)} until #{current[0]} hour"
 end
