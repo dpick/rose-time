@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'time'
+require 'tzinfo'
 
 #used array instead of hash because I need them in order
 $schedule = [
@@ -16,14 +17,18 @@ $schedule = [
   ['10th', Time.parse("4:15 pm")]
 ]
 
+
 helpers do
   def get_time(period)
     return period[1]
   end
 
   def current_period
+    tz = TZInfo::Timezone.get('America/Indiana/Indianapolis')
+    now = tz.utc_to_local(Time.now.utc).strftime("%I:%M %p")
+
     $schedule.each do |period|
-      if get_time(period) <=> Time.now
+      if get_time(period) <=> now
         current = period
       end
     end
