@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'time'
 require 'tzinfo'
+require 'pp'
 
 #used array instead of hash because I need them in order
 $schedule = [
@@ -39,12 +40,14 @@ helpers do
         return period
       end
     end
+
+    return current
   end
 end
 
 get '/' do
   current = current_period
-  current = $schedule[0] if current[0] == '10th'
+  current = $schedule[0] if current_period[0] == '10th'
 
   difference = current[1] - Time.now
   seconds = difference % 60
